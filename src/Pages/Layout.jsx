@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 export default function Layout() {
+    const { user } = useContext(AppContext);
     return (
         <>
             <header className="bg-blue-600 text-white shadow-md sticky top-0 z-10">
@@ -11,11 +14,15 @@ export default function Layout() {
                     >
                         Home
                     </Link>
-
-                    <div className="flex items-center gap-4">
-                        <Link to="/register" className="hover:text-blue-200">Register</Link>
-                        <Link to="/login" className="hover:text-blue-200">Login</Link>
-                    </div>
+                    {user ? (
+                        <div> Wecome back! {user.name}</div>
+                    ) : (
+                        <div className="flex items-center gap-4">
+                            <Link to="/register" className="hover:text-blue-200">Register</Link>
+                            <Link to="/login" className="hover:text-blue-200">Login</Link>
+                        </div>
+                    )
+                    }
                 </nav>
             </header>
 

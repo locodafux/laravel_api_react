@@ -70,3 +70,7 @@
   opacity: 0.8;
   box-shadow: none;
 }
+
+.error { 
+  color: #FF5C5C;
+}
