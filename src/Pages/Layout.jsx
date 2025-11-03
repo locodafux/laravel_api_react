@@ -3,7 +3,16 @@ import { Link, Outlet } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 
 export default function Layout() {
-    const { user } = useContext(AppContext);
+    const { user, token } = useContext(AppContext);
+    async function handleLogout() {
+        const res = await fetch("/api/user", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
+
+
     return (
         <>
             <header className="bg-blue-600 text-white shadow-md sticky top-0 z-10">
@@ -15,7 +24,10 @@ export default function Layout() {
                         Home
                     </Link>
                     {user ? (
+                        <>
                         <div> Wecome back! {user.name}</div>
+                        <button className="hover:text-blue-200" onClick={handleLogout}>Logout</button>
+                        </>
                     ) : (
                         <div className="flex items-center gap-4">
                             <Link to="/register" className="hover:text-blue-200">Register</Link>
