@@ -1,15 +1,24 @@
 import { useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 
 export default function Layout() {
-    const { user, token } = useContext(AppContext);
+    const { user, token, setUser, setToken } = useContext(AppContext);
+    const navigate = useNavigate();
     async function handleLogout() {
-        const res = await fetch("/api/user", {
+        const res = await fetch("/api/logout", {
+            method: "post",
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
+
+        if(res.ok){
+            setUser(null)
+            setToken(null)
+            localStorage.removeItem("token");
+            navigate("/");
+        }
     }
 
 
@@ -24,10 +33,10 @@ export default function Layout() {
                         Home
                     </Link>
                     {user ? (
-                        <>
-                        <div> Wecome back! {user.name}</div>
+                        <div className="flex gap-6">
+                        <div className="text-gray-200"> Wecome back! {user.name}</div>
                         <button className="hover:text-blue-200" onClick={handleLogout}>Logout</button>
-                        </>
+                        </div>
                     ) : (
                         <div className="flex items-center gap-4">
                             <Link to="/register" className="hover:text-blue-200">Register</Link>
